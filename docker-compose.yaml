@@ -1,0 +1,15 @@
+version: '3'
+services:
+
+  wiremock:
+    image: wiremock/wiremock:2.32.0
+    ports:
+      - "9002:8080"
+    command:
+      - "--global-response-templating"
+    volumes:
+      - ./dev-stack/wiremock/mappings:/home/wiremock/mappings
+      - ./dev-stack/wiremock/__files:/home/wiremock/__files
+
+volumes:
+  postgres-volume:

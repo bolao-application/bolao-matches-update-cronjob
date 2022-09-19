@@ -1,0 +1,9 @@
+{
+  "request": {
+    "method": "PATCH",
+    "urlPathPattern": "/api/v1/admin/jogos/([0-9]*)/placar"
+  },
+  "response": {
+    "status": 204
+  }
+}

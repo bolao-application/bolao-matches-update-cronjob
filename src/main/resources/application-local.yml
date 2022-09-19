@@ -1,0 +1,26 @@
+micronaut:
+  server:
+    port: 8082
+
+
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+clients:
+  backend:
+    api-url: http://localhost:9002/api/v1
+    base-url: http://localhost:9002
+  football-data-org:
+    api-url: http://localhost:9002
+
+user-credentials:
+  login: alexandrevs@outlook.com
+  password: abc123
+
+feature:
+  update-match-score:
+    toggle: true
+    cron-expression: '*/10 * * * * *'
+

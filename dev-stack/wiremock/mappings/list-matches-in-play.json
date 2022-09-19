@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/jogos"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": [
+      {
+        "id": 2,
+        "grupo": "B",
+        "t1": {
+          "id": 5,
+          "nome": "Inglaterra",
+          "urlBandeira": "https://crests.football-data.org/770.svg"
+        },
+        "t2": {
+          "id": 6,
+          "nome": "Irã",
+          "urlBandeira": "https://crests.football-data.org/iran.svg"
+        },
+        "t1Placar": 0,
+        "t2Placar": 0,
+        "dataHora": "2022-09-18T16:00:00Z",
+        "footballDataId": 391887,
+        "status": "EM_ANDAMENTO"
+      },
+      {
+        "id": 3,
+        "grupo": "A",
+        "t1": {
+          "id": 3,
+          "nome": "Senegal",
+          "urlBandeira": "https://crests.football-data.org/senegal.svg"
+        },
+        "t2": {
+          "id": 4,
+          "nome": "Holanda",
+          "urlBandeira": "https://crests.football-data.org/8601.svg"
+        },
+        "t1Placar": 2,
+        "t2Placar": 1,
+        "dataHora": "2022-09-18T16:00:00Z",
+        "footballDataId": 391881,
+        "status": "EM_ANDAMENTO"
+      }
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
