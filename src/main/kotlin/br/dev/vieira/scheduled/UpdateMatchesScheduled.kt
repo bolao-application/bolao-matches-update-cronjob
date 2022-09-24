@@ -39,13 +39,14 @@ class UpdateMatchesScheduled(
             val match = allMatches[i]
 
             val matchResource = allMatchesFD.matches.find { it.id == match.footballDataId } ?: continue
-            val placar: Score.AuxScore? = matchResource.mostRecentScore()
-            val t1Placar: Int = placar?.homeTeam ?: continue
-            val t2Placar: Int = placar.awayTeam ?: continue
             val matchStatus: MatchStatus = matchResource.status?.convert() ?: continue
 
+            val placar: Score.AuxScore? = matchResource.mostRecentScore()
+            val t1Placar: Int? = placar?.homeTeam
+            val t2Placar: Int? = placar?.awayTeam
+
             try {
-                if(t1Placar == match.t1Placar && t2Placar == match.t2Placar && matchStatus == match.status) continue
+                if (t1Placar == match.t1Placar && t2Placar == match.t2Placar && matchStatus == match.status) continue
 
                 val request = UpdateScoreRequest(t1Placar, t2Placar, matchStatus)
                 matchService.updateScore(matchId = match.id, request = request, authorization = token)
