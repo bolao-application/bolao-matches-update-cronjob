@@ -2,6 +2,7 @@ package br.dev.vieira.services
 
 import br.dev.vieira.client.MatchClient
 import br.dev.vieira.domain.Match
+import br.dev.vieira.domain.MatchStatus
 import br.dev.vieira.domain.UpdateScoreRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.client.exceptions.HttpClientResponseException
@@ -14,8 +15,8 @@ class MatchService(
 ) {
     private val logger = LoggerFactory.getLogger(MatchService::class.java)
 
-    fun listMatches(inPlay: Boolean): List<Match> = try {
-        client.listMatches(inPlay)
+    fun listMatches(status: MatchStatus?): List<Match> = try {
+        client.listMatches(status)
     } catch (ex: HttpClientResponseException) {
         logger.error("Error getting matches. Status ${ex.status}. Body: ${ex.response.body()}")
         throw ex

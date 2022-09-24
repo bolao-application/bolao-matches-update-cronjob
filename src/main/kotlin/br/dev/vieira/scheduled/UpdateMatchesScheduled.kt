@@ -26,7 +26,7 @@ class UpdateMatchesScheduled(
     @Scheduled(cron = "\${feature.update-match-score.cron-expression}")
     fun updateMatchesInPlay() {
 
-        val matchesInPlay = matchService.listMatches(inPlay = true)
+        val matchesInPlay = matchService.listMatches(status = MatchStatus.EM_ANDAMENTO)
         logger.info("${matchesInPlay.size} matches in play")
 
         if (matchesInPlay.isEmpty()) return
