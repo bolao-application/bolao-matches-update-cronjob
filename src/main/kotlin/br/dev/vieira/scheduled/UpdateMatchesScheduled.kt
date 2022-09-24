@@ -24,21 +24,21 @@ class UpdateMatchesScheduled(
     private val logger = LoggerFactory.getLogger(UpdateMatchesScheduled::class.java)
 
     @Scheduled(cron = "\${feature.update-match-score.cron-expression}")
-    fun updateMatchesInPlay() {
+    fun updateMatches() {
 
-        val matchesInPlay = matchService.listMatches(status = MatchStatus.EM_ANDAMENTO)
-        logger.info("${matchesInPlay.size} matches in play")
+        val allMatches = matchService.listMatches(status = null)
+        logger.info("${allMatches.size} matches loaded")
 
-        if (matchesInPlay.isEmpty()) return
+        if (allMatches.isEmpty()) return
 
-        val allMatches = footballData.getCompetitionMatches(competitionId = 2000)
+        val allMatchesFD = footballData.getCompetitionMatches(competitionId = 2000)
         val token = auth.getToken(login = login, password = password)
         var updatedMatchesCount = 0
 
-        for (i in matchesInPlay.indices) {
-            val match = matchesInPlay[i]
+        for (i in allMatches.indices) {
+            val match = allMatches[i]
 
-            val matchResource = allMatches.matches.find { it.id == match.footballDataId } ?: continue
+            val matchResource = allMatchesFD.matches.find { it.id == match.footballDataId } ?: continue
             val placar: Score.AuxScore? = matchResource.mostRecentScore()
             val t1Placar: Int = placar?.homeTeam ?: continue
             val t2Placar: Int = placar.awayTeam ?: continue
