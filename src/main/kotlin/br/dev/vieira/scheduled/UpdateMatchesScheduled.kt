@@ -1,6 +1,6 @@
 package br.dev.vieira.scheduled
 
-import br.dev.vieira.domain.MatchStatusFD
+import br.dev.vieira.domain.MatchStatus
 import br.dev.vieira.domain.Score
 import br.dev.vieira.domain.UpdateScoreRequest
 import br.dev.vieira.services.AuthService
@@ -42,10 +42,12 @@ class UpdateMatchesScheduled(
             val placar: Score.AuxScore? = matchResource.mostRecentScore()
             val t1Placar: Int = placar?.homeTeam ?: continue
             val t2Placar: Int = placar.awayTeam ?: continue
-            val matchStatusFD: MatchStatusFD = matchResource.status ?: continue
+            val matchStatus: MatchStatus = matchResource.status?.convert() ?: continue
 
             try {
-                val request = UpdateScoreRequest(t1Placar, t2Placar, matchStatusFD.convert())
+                if(t1Placar == match.t1Placar && t2Placar == match.t2Placar && matchStatus == match.status) continue
+
+                val request = UpdateScoreRequest(t1Placar, t2Placar, matchStatus)
                 matchService.updateScore(matchId = match.id, request = request, authorization = token)
             } catch (ex: Exception) {
                 continue
