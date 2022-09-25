@@ -3,7 +3,7 @@ package br.dev.vieira.services
 import br.dev.vieira.client.MatchClient
 import br.dev.vieira.domain.Match
 import br.dev.vieira.domain.MatchStatus
-import br.dev.vieira.domain.UpdateScoreRequest
+import br.dev.vieira.domain.UpdateMatchRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import jakarta.inject.Singleton
@@ -25,7 +25,7 @@ class MatchService(
         throw ex
     }
 
-    fun updateScore(matchId: Long, request: UpdateScoreRequest, authorization: String): Unit = try {
+    fun updateScore(matchId: Long, request: UpdateMatchRequest, authorization: String): Unit = try {
         val response = client.updateScore(matchId, request, authorization)
         if (response.status.code >= 400)
             throw HttpClientResponseException("Error updating match", HttpResponse.status<Unit>(response.status))

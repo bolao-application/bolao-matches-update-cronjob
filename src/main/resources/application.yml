@@ -4,6 +4,7 @@ micronaut:
   http:
     client:
       logger-name: client
+      read-timeout: ${BMUC_CLIENT_TIMEOUT:5s}
   server:
     port: ${BMUC_SERVER_PORT:8082}
 

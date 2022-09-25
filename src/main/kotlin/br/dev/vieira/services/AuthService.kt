@@ -14,7 +14,7 @@ class AuthService(
 
     fun getToken(login: String, password: String): String = try {
         val tokenResponse = client.authenticate(CredentialsRequest(login, password))
-        "${tokenResponse.tipo} ${tokenResponse.token}"
+        "${tokenResponse.type} ${tokenResponse.token}"
     } catch (ex: HttpClientResponseException) {
         logger.error("Authentication error. Status ${ex.status}. Body: ${ex.response.body()}")
         throw ex

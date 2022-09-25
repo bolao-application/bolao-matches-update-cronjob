@@ -2,7 +2,7 @@ package br.dev.vieira.client
 
 import br.dev.vieira.domain.Match
 import br.dev.vieira.domain.MatchStatus
-import br.dev.vieira.domain.UpdateScoreRequest
+import br.dev.vieira.domain.UpdateMatchRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
@@ -16,7 +16,7 @@ interface MatchClient {
     @Patch("/admin/jogos/{matchId}/placar")
     fun updateScore(
         @PathVariable matchId: Long,
-        @Body request: UpdateScoreRequest,
+        @Body request: UpdateMatchRequest,
         @Header authorization: String,
     ): HttpResponse<Unit>
 }

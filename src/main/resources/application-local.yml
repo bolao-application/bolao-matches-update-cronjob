@@ -2,12 +2,6 @@ micronaut:
   server:
     port: 8082
 
-
-netty:
-  default:
-    allocator:
-      max-order: 3
-
 clients:
   backend:
     api-url: http://localhost:9002/api/v1
