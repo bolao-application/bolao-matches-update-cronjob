@@ -34,7 +34,8 @@ class UpdateMatchesScheduled(
         if (allMatches.isEmpty()) return
 
         val allMatchesFD = footballData.getCompetitionMatches(competitionId = 2000)
-        val token = auth.getToken(login = login, password = password)
+        val tokenResponse = auth.authenticate(login = login, password = password)
+        val token = "${tokenResponse.type} ${tokenResponse.token}"
         var updatedMatchesCount = 0
 
         for (i in allMatches.indices) {
