@@ -13,7 +13,7 @@ interface MatchClient {
     @Get("/jogos")
     fun listMatches(@QueryValue("status") status: MatchStatus?): List<Match>
 
-    @Patch("/admin/jogos/{matchId}/placar")
+    @Patch("/admin/jogos/{matchId}")
     fun updateScore(
         @PathVariable matchId: Long,
         @Body request: UpdateMatchRequest,
