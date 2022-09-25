@@ -50,7 +50,6 @@ class UpdateMatchesScheduled(
             val t2Placar: Int? = placar?.awayTeam
 
             try {
-//                if (t1Placar == match.t1Score && t2Placar == match.t2Score && matchStatus == match.status && startTime == match.startTime) continue
                 if (match.isUpToDate(t1Placar = t1Placar, t2Placar = t2Placar, matchStatus, startTime)) continue
 
                 val request = UpdateMatchRequest(t1Placar, t2Placar, matchStatus, startTime)
