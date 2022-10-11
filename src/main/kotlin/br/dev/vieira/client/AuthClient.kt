@@ -9,6 +9,6 @@ import io.micronaut.http.client.annotation.Client
 @Client("\${clients.backend.base-url}")
 interface AuthClient {
 
-    @Post("/auth")
+    @Post("/auth/login")
     fun authenticate(@Body request: CredentialsRequest): TokenResponse
 }
