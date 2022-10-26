@@ -10,7 +10,7 @@ import io.micronaut.http.client.annotation.Client
 @Client("\${clients.backend.api-url}")
 interface MatchClient {
 
-    @Get("/jogos")
+    @Get("/competicoes/2000/temporadas/1382/jogos")
     fun listMatches(@QueryValue("status") status: MatchStatus?): List<Match>
 
     @Patch("/admin/jogos/{matchId}")

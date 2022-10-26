@@ -8,4 +8,7 @@ data class UpdateMatchRequest(
     @JsonProperty("time2Placar") val team2Score: Int?,
     @JsonProperty("status") val status: MatchStatus,
     @JsonProperty("dataHora") val startTime: OffsetDateTime,
+    @JsonProperty("grupo") val group: String?,
+    @JsonProperty("fase") val stage: CompetitionStage,
+    @JsonProperty("rodada") val matchday: Int?,
 )

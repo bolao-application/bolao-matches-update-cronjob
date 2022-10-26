@@ -13,6 +13,8 @@ data class MatchFD(
     val id: Long,
     val status: MatchStatusFD?,
     val utcDate: OffsetDateTime,
+    val matchday: Int?,
+    val stage: CompetitionStageFD,
     val group: String?,
     val homeTeam: MatchTeam?,
     val awayTeam: MatchTeam?,
@@ -102,4 +104,34 @@ enum class MatchStatusFD {
     };
 
     abstract fun convert(): MatchStatus
+}
+
+@Suppress("unused")
+enum class CompetitionStageFD {
+    GROUP_STAGE {
+        override fun convert(): CompetitionStage = CompetitionStage.FASE_GRUPO
+    },
+    REGULAR_SEASON {
+        override fun convert(): CompetitionStage = CompetitionStage.TEMPORADA_REGULAR
+    },
+    LAST_32 {
+        override fun convert(): CompetitionStage = CompetitionStage.DECIMA_SEXTA_FINAL
+    },
+    LAST_16 {
+        override fun convert(): CompetitionStage = CompetitionStage.OITAVAS_FINAL
+    },
+    QUARTER_FINALS {
+        override fun convert(): CompetitionStage = CompetitionStage.QUARTAS_FINAL
+    },
+    SEMI_FINALS {
+        override fun convert(): CompetitionStage = CompetitionStage.SEMI_FINAL
+    },
+    THIRD_PLACE {
+        override fun convert(): CompetitionStage = CompetitionStage.TERCEIRO_LUGAR
+    },
+    FINAL {
+        override fun convert(): CompetitionStage = CompetitionStage.FINAL
+    };
+
+    abstract fun convert(): CompetitionStage
 }

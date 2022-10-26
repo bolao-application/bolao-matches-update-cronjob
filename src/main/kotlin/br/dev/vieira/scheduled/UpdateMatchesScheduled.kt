@@ -1,9 +1,6 @@
 package br.dev.vieira.scheduled
 
-import br.dev.vieira.domain.MatchStatus
-import br.dev.vieira.domain.Score
-import br.dev.vieira.domain.UpdateMatchRequest
-import br.dev.vieira.domain.isUpToDate
+import br.dev.vieira.domain.*
 import br.dev.vieira.services.AuthService
 import br.dev.vieira.services.FootballDataService
 import br.dev.vieira.services.MatchService
@@ -41,18 +38,31 @@ class UpdateMatchesScheduled(
         for (i in allMatches.indices) {
             val match = allMatches[i]
 
-            val matchResource = allMatchesFD.matches.find { it.id == match.footballDataId } ?: continue
+            val matchResource = allMatchesFD.matches.find { matchFD -> matchFD.id == match.id } ?: continue
             val matchStatus: MatchStatus = matchResource.status?.convert() ?: continue
             val startTime: OffsetDateTime = matchResource.utcDate
+            val group: String? = matchResource.group?.replace("GROUP_", "", true)
+            val matchday: Int? = matchResource.matchday
+            val stage: CompetitionStage = matchResource.stage.convert()
 
             val placar: Score.AuxScore? = matchResource.mostRecentScore()
             val t1Placar: Int? = placar?.homeTeam
             val t2Placar: Int? = placar?.awayTeam
 
             try {
-                if (match.isUpToDate(t1Placar = t1Placar, t2Placar = t2Placar, matchStatus, startTime)) continue
+                val isUpToDate: Boolean = match.isUpToDate(
+                    t1Score = t1Placar,
+                    t2Score = t2Placar,
+                    status = matchStatus,
+                    startTime = startTime,
+                    group = group,
+                    matchday = matchday,
+                    stage = stage
+                )
 
-                val request = UpdateMatchRequest(t1Placar, t2Placar, matchStatus, startTime)
+                if (isUpToDate) continue
+
+                val request = UpdateMatchRequest(t1Placar, t2Placar, matchStatus, startTime, group, stage, matchday)
                 matchService.updateScore(matchId = match.id, request = request, authorization = token)
             } catch (ex: Exception) {
                 continue
