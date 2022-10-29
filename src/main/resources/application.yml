@@ -4,9 +4,9 @@ micronaut:
   http:
     client:
       logger-name: client
-      read-timeout: ${BMUC_CLIENT_TIMEOUT:5s}
+      read-timeout: ${CLIENT_TIMEOUT:5s}
   server:
-    port: ${BMUC_SERVER_PORT:8082}
+    port: ${SERVER_PORT:8082}
 
 
 netty:
@@ -16,18 +16,18 @@ netty:
 
 clients:
   backend:
-    api-url: ${BMUC_BACKEND_API_URL}
-    base-url: ${BMUC_BACKEND_API_URL}
+    api-url: ${BACKEND_API_URL}
+    base-url: ${BACKEND_API_URL}
   football-data-org:
-    api-url: ${BMUC_FOOTBALL_DATA_URL:`https://api.football-data.org`}
-    api-key: ${BMUC_FOOTBALL_DATA_API_KEY}
+    api-url: ${FOOTBALL_DATA_URL:`https://api.football-data.org`}
+    api-key: ${FOOTBALL_DATA_API_KEY}
 
 user-credentials:
-  login: ${BMUC_USER_LOGIN}
-  password: ${BMUC_USER_PASSWORD}
+  login: ${USER_LOGIN}
+  password: ${USER_PASSWORD}
 
 feature:
   update-match-score:
     toggle: true
-    cron-expression: ${BMUC_CRON_EXPRESSION:`0 */5 * * * *`}
+    cron-expression: ${CRON_EXPRESSION:`0 */5 * * * *`}
 
