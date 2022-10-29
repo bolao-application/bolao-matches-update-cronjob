@@ -17,7 +17,7 @@ netty:
 clients:
   backend:
     api-url: ${BACKEND_API_URL}
-    base-url: ${BACKEND_API_URL}
+    base-url: ${BACKEND_BASE_URL}
   football-data-org:
     api-url: ${FOOTBALL_DATA_URL:`https://api.football-data.org`}
     api-key: ${FOOTBALL_DATA_API_KEY}
