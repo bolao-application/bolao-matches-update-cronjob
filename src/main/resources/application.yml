@@ -23,8 +23,13 @@ clients:
     api-key: ${BMUC_FOOTBALL_DATA_API_KEY}
 
 user-credentials:
-  login: ${BMUC_USER_LOGIN}
-  password: ${BMUC_USER_PASSWORD}
+  auth-method: ${BMUC_AUTH_METHOD:credentials}
+  login: ${BMUC_USER_LOGIN:}
+  password: ${BMUC_USER_PASSWORD:}
+  google:
+    client-id: ${BMUC_GOOGLE_CLIENT_ID:}
+    client-secret: ${BMUC_GOOGLE_CLIENT_SECRET:}
+    refresh-token: ${BMUC_GOOGLE_REFRESH_TOKEN:}
 
 feature:
   update-match-score:

@@ -4,7 +4,6 @@ import br.dev.vieira.domain.*
 import br.dev.vieira.services.AuthService
 import br.dev.vieira.services.FootballDataService
 import br.dev.vieira.services.MatchService
-import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.scheduling.annotation.Scheduled
 import jakarta.inject.Singleton
@@ -17,8 +16,6 @@ class UpdateMatchesScheduled(
     private val matchService: MatchService,
     private val auth: AuthService,
     private val footballData: FootballDataService,
-    @Property(name = "user-credentials.login") private val login: String,
-    @Property(name = "user-credentials.password") private val password: String,
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(UpdateMatchesScheduled::class.java)
@@ -67,7 +64,7 @@ class UpdateMatchesScheduled(
         if (allMatches.isEmpty()) return
 
         val allMatchesFD = footballData.getCompetitionMatches(competitionId = competition.competitionId)
-        val tokenResponse = auth.authenticate(login = login, password = password)
+        val tokenResponse = auth.authenticate()
         val token = "${tokenResponse.type} ${tokenResponse.token}"
         var updatedMatchesCount = 0
 

@@ -2,7 +2,9 @@ package br.dev.vieira.services
 
 import br.dev.vieira.client.AuthClient
 import br.dev.vieira.domain.CredentialsRequest
+import br.dev.vieira.domain.GoogleAuthRequest
 import br.dev.vieira.domain.TokenResponse
+import io.micronaut.context.annotation.Property
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -10,11 +12,24 @@ import org.slf4j.LoggerFactory
 @Singleton
 class AuthService(
     private val client: AuthClient,
+    private val googleIdTokenService: GoogleIdTokenService,
+    @Property(name = "user-credentials.auth-method") private val authMethod: String,
+    @Property(name = "user-credentials.login", defaultValue = "") private val login: String,
+    @Property(name = "user-credentials.password", defaultValue = "") private val password: String,
 ) {
     private val logger = LoggerFactory.getLogger(AuthService::class.java)
 
-    fun authenticate(login: String, password: String): TokenResponse = try {
-        client.authenticate(CredentialsRequest(login, password))
+    fun authenticate(): TokenResponse = try {
+        when (authMethod) {
+            "google" -> {
+                val idToken = googleIdTokenService.getIdToken()
+                client.authenticateWithGoogle(GoogleAuthRequest(idToken))
+            }
+            else -> {
+                logger.info("Authenticating with credentials")
+                client.authenticate(CredentialsRequest(login, password))
+            }
+        }
     } catch (ex: HttpClientResponseException) {
         logger.error("Authentication error. Status ${ex.status}. Body: ${ex.response.body()}")
         throw ex

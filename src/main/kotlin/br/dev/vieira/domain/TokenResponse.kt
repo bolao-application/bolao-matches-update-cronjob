@@ -7,6 +7,5 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class TokenResponse(
     val token: String,
     val refreshToken: String,
-    val roles: List<String>,
     val type: String,
 )
