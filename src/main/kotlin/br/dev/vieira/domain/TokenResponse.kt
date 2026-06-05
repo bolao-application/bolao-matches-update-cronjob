@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TokenResponse(
-    @JsonProperty("token") val token: String,
-    @JsonProperty("refreshToken") val refreshToken: String,
-    @JsonProperty("roles") val roles: List<String>,
-    @JsonProperty("tipo") val type: String,
+    val token: String,
+    val refreshToken: String,
+    val roles: List<String>,
+    val type: String,
 )

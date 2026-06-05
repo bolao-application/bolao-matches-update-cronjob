@@ -1,6 +1,10 @@
 package br.dev.vieira.domain
 
+import br.dev.vieira.domain.ScoreDurationFD.EXTRA_TIME
+import br.dev.vieira.domain.ScoreDurationFD.PENALTY_SHOOTOUT
+import br.dev.vieira.domain.ScoreDurationFD.REGULAR
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,22 +17,16 @@ data class MatchFD(
     val id: Long,
     val status: MatchStatusFD?,
     val utcDate: OffsetDateTime,
-    val matchday: Int?,
-    val stage: CompetitionStageFD,
-    val group: String?,
+    val group: GroupFD?,
     val homeTeam: MatchTeam?,
     val awayTeam: MatchTeam?,
     val score: Score,
+    val stage: StageFD,
+    @field:JsonProperty("matchday") val matchDay: Int?,
 ) {
 
     fun mostRecentScore(): Score.AuxScore? {
-        return when {
-            score.penalties.isValid() -> score.penalties
-            score.extraTime.isValid() -> score.extraTime
-            score.fullTime.isValid() -> score.fullTime
-            score.halfTime.isValid() -> score.halfTime
-            else -> null
-        }
+        return score.mostRecentScore()
     }
 }
 
@@ -41,97 +39,97 @@ data class MatchTeam(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Score(
+    val winner: ScoreWinnerFD?,
+    val duration: ScoreDurationFD,
     val fullTime: AuxScore,
     val halfTime: AuxScore,
-    val extraTime: AuxScore,
-    val penalties: AuxScore,
+    val regularTime: AuxScore?,
+    val extraTime: AuxScore?,
+    val penalties: AuxScore?,
 ) {
     data class AuxScore(
-        val homeTeam: Int?,
-        val awayTeam: Int?,
+        val home: Int?,
+        val away: Int?,
     ) {
-        fun isValid(): Boolean = homeTeam != null && awayTeam != null
+        fun isValid(): Boolean = home != null && away != null
+    }
+
+    fun mostRecentScore(): AuxScore? = when (duration) {
+        REGULAR -> regularTimeScore()
+        EXTRA_TIME, PENALTY_SHOOTOUT -> regularTime
+    }
+
+    fun regularTimeScore(): AuxScore? = when {
+        fullTime.isValid() -> fullTime
+        halfTime.isValid() -> halfTime
+        else -> null
     }
 }
 
 @Suppress("unused")
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class MatchResource(
-    val match: MatchFD,
-)
-
-@Suppress("unused")
 enum class MatchStatusFD {
-    SCHEDULED {
-        override fun convert(): MatchStatus {
-            return MatchStatus.AGENDADO
-        }
-    },
-    LIVE {
-        override fun convert(): MatchStatus {
-            return MatchStatus.EM_ANDAMENTO
-        }
-    },
-    IN_PLAY {
-        override fun convert(): MatchStatus {
-            return MatchStatus.EM_ANDAMENTO
-        }
-    },
-    PAUSED {
-        override fun convert(): MatchStatus {
-            return MatchStatus.PAUSADO
-        }
-    },
-    FINISHED {
-        override fun convert(): MatchStatus {
-            return MatchStatus.ENCERRADO
-        }
-    },
-    POSTPONED {
-        override fun convert(): MatchStatus {
-            return MatchStatus.AGENDADO
-        }
-    },
-    SUSPENDED {
-        override fun convert(): MatchStatus {
-            return MatchStatus.PAUSADO
-        }
-    },
-    CANCELED {
-        override fun convert(): MatchStatus {
-            return MatchStatus.PAUSADO
-        }
-    };
-
-    abstract fun convert(): MatchStatus
+    TIMED,
+    AWARDED,
+    SCHEDULED,
+    IN_PLAY,
+    PAUSED,
+    FINISHED,
+    POSTPONED,
+    SUSPENDED,
+    CANCELLED,
+    EXTRA_TIME,
+    PENALTY_SHOOTOUT;
 }
 
-@Suppress("unused")
-enum class CompetitionStageFD {
-    GROUP_STAGE {
-        override fun convert(): CompetitionStage = CompetitionStage.FASE_GRUPO
-    },
-    REGULAR_SEASON {
-        override fun convert(): CompetitionStage = CompetitionStage.TEMPORADA_REGULAR
-    },
-    LAST_32 {
-        override fun convert(): CompetitionStage = CompetitionStage.DECIMA_SEXTA_FINAL
-    },
-    LAST_16 {
-        override fun convert(): CompetitionStage = CompetitionStage.OITAVAS_FINAL
-    },
-    QUARTER_FINALS {
-        override fun convert(): CompetitionStage = CompetitionStage.QUARTAS_FINAL
-    },
-    SEMI_FINALS {
-        override fun convert(): CompetitionStage = CompetitionStage.SEMI_FINAL
-    },
-    THIRD_PLACE {
-        override fun convert(): CompetitionStage = CompetitionStage.TERCEIRO_LUGAR
-    },
-    FINAL {
-        override fun convert(): CompetitionStage = CompetitionStage.FINAL
-    };
+enum class StageFD {
+    FINAL,
+    THIRD_PLACE,
+    SEMI_FINALS,
+    QUARTER_FINALS,
+    LAST_16,
+    LAST_32,
+    LAST_64,
+    GROUP_STAGE,
+    LEAGUE_STAGE,
+    PLAYOFFS,
+    REGULAR_SEASON,
+//    ROUND_4,
+//    ROUND_3,
+//    ROUND_2,
+//    ROUND_1,
+//    PRELIMINARY_ROUND,
+//    QUALIFICATION,
+//    QUALIFICATION_ROUND_1,
+//    QUALIFICATION_ROUND_2,
+//    QUALIFICATION_ROUND_3,
+//    PLAYOFF_ROUND_1,
+//    PLAYOFF_ROUND_2,
+//    CLAUSURA,
+//    APERTURA,
+//    CHAMPIONSHIP,
+//    RELEGATION,
+//    RELEGATION_ROUND,
+}
 
-    abstract fun convert(): CompetitionStage
+enum class GroupFD {
+    GROUP_A,
+    GROUP_B,
+    GROUP_C,
+    GROUP_D,
+    GROUP_E,
+    GROUP_F,
+    GROUP_G,
+    GROUP_H,
+    GROUP_I,
+    GROUP_J,
+    GROUP_K,
+    GROUP_L;
+}
+
+enum class ScoreDurationFD {
+    REGULAR, EXTRA_TIME, PENALTY_SHOOTOUT
+}
+
+enum class ScoreWinnerFD {
+    DRAW, AWAY_TEAM, HOME_TEAM
 }

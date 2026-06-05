@@ -13,7 +13,7 @@ import io.micronaut.http.client.annotation.Client
     Header(name = "X-Auth-Token", value = "\${clients.football-data-org.api-key}"),
 )
 interface FootballDataOrgClient {
-    @Get("/v2/competitions/{competitionId}/matches")
+    @Get("/v4/competitions/{competitionId}/matches")
     fun getCompetitionMatches(@PathVariable competitionId: Long): CompetitionWithMatches
 
 }
