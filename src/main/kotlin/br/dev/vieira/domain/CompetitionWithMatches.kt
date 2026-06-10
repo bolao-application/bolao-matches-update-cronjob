@@ -55,14 +55,8 @@ data class Score(
     }
 
     fun mostRecentScore(): AuxScore? = when (duration) {
-        REGULAR -> regularTimeScore()
+        REGULAR -> regularTime ?: fullTime.takeIf { it.isValid() } ?: halfTime.takeIf { it.isValid() }
         EXTRA_TIME, PENALTY_SHOOTOUT -> regularTime
-    }
-
-    fun regularTimeScore(): AuxScore? = when {
-        fullTime.isValid() -> fullTime
-        halfTime.isValid() -> halfTime
-        else -> null
     }
 }
 
