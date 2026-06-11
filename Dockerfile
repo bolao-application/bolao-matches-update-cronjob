@@ -8,11 +8,11 @@ RUN mvn dependency:go-offline
 COPY src/ src/
 RUN mvn package -DskipTests
 
-FROM eclipse-temurin:11-jre-jammy
+FROM eclipse-temurin:11-jre
 
 WORKDIR /app
 
-RUN addgroup -S app && adduser -S app -G app
+RUN groupadd -r app && useradd -r -g app app
 
 COPY --from=build /app/target/bolao-matches-update-cronjob-*.jar app.jar
 
